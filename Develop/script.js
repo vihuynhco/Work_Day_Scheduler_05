@@ -10,21 +10,29 @@ var saveBtn = $('.saveBtn');
 var textCenter=$('.text-center')
 var textArea = $('.textarea')
 
-var currentTime = dayjs().hour()
+var currentTime = dayjs().format('H')
 console.log(currentTime)
+
 
 
  //Use array for past, present and furture color code
  
 
 
-  //Use array for past, present and furture color code
-
 
 //display the current time & date from Day.JS//
 
 $(document).ready (function() {
   console.log("Ready")
+
+  saveBtn.on ('click',function(){
+
+ 
+    var currentNote = $(this).siblings('.description').val(); //this is to get the 'value' for local storage
+    var hourId = $(this).parent().attr('id') //this is to get the 'key' for local storage
+    localStorage.setItem('hourId',currentNote);
+    
+  })
 
 
 function displayTime() {
@@ -34,21 +42,35 @@ function displayTime() {
 
 }
 
-
-//$(function () {
+$(function () {
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
-  // if clicked document.getElementById(var hours array).innerHTML text and store in local storage
+  // if clicked document.getElementById(var hours array).innerHTML text 
+  $(".time-block").each(function () {
+    var timeBlock = $(this).attr("id").split("-")[1]
+      console.log(timeBlock)
+      if (currentTime == timeBlock){
+        $(this).removeClass('future');
+        $(this).removeClass('past');
+        $(this).addClass('present');
+      }
+      else if (currentTime > timeBlock){
+        $(this).removeClass('future');
+        $(this).removeClass('present');
+        $(this).addClass('past');
+      }
+      else if (currentTime < timeBlock){
+        $(this).removeClass('past');
+        $(this).removeClass('present');
+        $(this).addClass('future');
+      }
+      console.log()
+ 
 
-    
-    saveBtn.on ('click',function(){
-      console.log(this)
 
-      var currentNote = $(this).siblings('.description').val(); //this is to get the 'value' for local storage
-      var hourId = $(this).parent().attr('id') //this is to get the 'key' for local storage
-      localStorage.setItem('hourId','currentNote');
+  })
 
-    })
+   
     
     //keep at the end of JS, want to load the page first before running displaytime fxn every second.
     displayTime();
@@ -56,6 +78,7 @@ function displayTime() {
 
 
   })
+})
 
 
   // local storage. HINT: What does `this` reference in the click listener
@@ -76,7 +99,7 @@ function displayTime() {
   // attribute of each time-block be used to do this?
   //
   // TODO: Add code to display the current date in the header of the page.
-//});
+//
 
 
 // AS AN employee with a busy schedule
